@@ -1,0 +1,12 @@
+{
+  "name": "keso-php",
+  "version": "1.1.1",
+  "description": "Keso Framework PHP un proyecto de codigo abierto para el desarrollo de aplicaciones web",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Keso Framework PHP</title>
     <link rel="stylesheet" href="<?= APP_PUBLIC . "css/style.css"; ?>">
+    <link rel="shortcut icon" href="<?= APP_PUBLIC . "keso.png"; ?>" type="image/png">
 </head>
 
 <body>

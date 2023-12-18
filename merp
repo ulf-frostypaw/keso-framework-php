@@ -1,0 +1,40 @@
+#!/usr/bin/env php
+<?php
+require __DIR__ . '/bin/functions.php';
+
+// merp - PHP CLI application
+
+if ($argc < 2) {
+    echo "Uso: merp comando [argumentos]\n";
+    exit(1);
+}
+
+$comando = $argv[1];
+
+switch ($comando) {
+    case 'help':
+        ayuda();
+        break;
+    case 'version':
+        version();
+        break;
+    case 'crear-controlador':
+        if ($argc < 3) {
+            echo "Uso: merp crear-controlador NOMBRE\n";
+            exit(1);
+        }
+        crearControlador($argv[2]);
+        break;
+    case 'crear-modelo':
+        if ($argc < 3) {
+            echo "Uso: merp crear-modelo NOMBRE\n";
+            exit(1);
+        }
+        crearModelo($argv[2]);
+        break;
+    // add command to create a migration
+
+    default:
+        echo "Comando no reconocido: $comando\n";
+        exit(1);
+}
