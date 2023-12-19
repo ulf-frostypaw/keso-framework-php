@@ -1,0 +1,10 @@
+{
+    "scripts": {
+        "phinx-create": "vendor/bin/phinx --configuration=\"./config/phinx.php\" create",
+        "phinx-migrate": "vendor/bin/phinx --configuration=\"./config/phinx.php\" migrate",
+        "phinx-rollback": "vendor/bin/phinx --configuration=\"./config/phinx.php\" rollback"
+    },
+    "require": {
+        "robmorgan/phinx": "^0.15.5"
+    }
+}

@@ -15,13 +15,14 @@ Con Keso Framework PHP, puedes aprovechar una amplia gama de características y 
 
 ## Novedades
 - merp-cli - Ejecuta algunos comandos basicos desde la linea de comandos.
+- sistema de migraciones con Phinx (experimental)
 
 ## Creditos
 - Imagen por defecto de sergal ([Deviant Art](https://www.deviantart.com/michifishu/art/Cheese-wedge-Sergal-685836827))
 - Inspirado en Laravel PHP
 
 ## todo
-- Documentación
-- Soporte de migraciones
+- Documentación (OK)
+- Soporte de migraciones (experimental)
 - Soporte de webpack
 - error handler
