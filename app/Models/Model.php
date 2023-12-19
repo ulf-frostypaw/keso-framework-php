@@ -18,10 +18,10 @@ class Model
 
     public function __construct()
     {
-        $this->connection();
+        $this->connect();
     }
 
-    public function connection()
+    public function connect()
     {
         $this->connection = new mysqli($this->db_host, $this->db_user, $this->db_pass, $this->db_name);
         if ($this->connection->connect_error) {
@@ -29,7 +29,8 @@ class Model
         }
     }
 
-    public function query($sql, $data = [], $params = null)
+    // Función para ejecutar consultas preparadas
+    public function executeQuery($sql, $data = [], $params = null)
     {
         if ($data) {
             if ($params == null) {
@@ -43,83 +44,68 @@ class Model
             $this->query = $this->connection->query($sql);
         }
         return $this;
-
     }
+
+    // Obtener el primer resultado de la consulta
     public function first()
     {
         return $this->query->fetch_assoc();
     }
+
+    // Obtener todos los resultados de la consulta
     public function get()
     {
         return $this->query->fetch_all(MYSQLI_ASSOC);
     }
 
-    // consultas preparadas
-    public function all()
+    // BASIC CRUD Functions
+
+    public function getAll()
     {
         $sql = "SELECT * FROM {$this->table}";
-        return $this->query($sql)->get();
+        return $this->executeQuery($sql)->get();
     }
 
-    public function findByPk($id)
+    public function findById($id)
     {
-        // SELECT * FROM myTable WHERE id = 1
         $sql = "SELECT * FROM {$this->table} WHERE id = ?";
-        return $this->query($sql, [$id], 'i')->first();
+        return $this->executeQuery($sql, [$id], 'i')->first();
     }
 
-    public function where($column, $operator, $value = null)
+    public function findBy($column, $value)
     {
-        // SELECT * FROM myTable WHERE id = 1
-        if ($value == null) {
-            $value = $operator;
-            $operator = '=';
-        }
-        $value = $this->connection->real_escape_string($value);
-        $sql = "SELECT * FROM {$this->table} WHERE {$column} {$operator} ?";
-        $this->query($sql, [$value], 's');
-        /* $smnt = $this->connection->prepare($sql);
-        $smnt->bind_param('s', $value);
-        $smnt->execute();
-        $this->query = $smnt->get_result(); */
-        return $this;
+        $sql = "SELECT * FROM {$this->table} WHERE {$column} = ?";
+        return $this->executeQuery($sql, [$value], 's')->get();
     }
 
-    public function create($data)
+    public function create($columns, $data)
     {
-        $columns = array_keys($data);
-        $columns = implode(', ', $columns);
-
+        $columns = implode(', ', array_keys($data));
         $values = array_values($data);
 
         $sql = "INSERT INTO {$this->table} ({$columns}) VALUES (" . str_repeat('?, ', count($values) - 1) . "?)";
-        $this->query($sql, $values);
+        $this->executeQuery($sql, $values);
 
         $insert_id = $this->connection->insert_id;
-        return $this->findByPk($insert_id);
+        return $this->findById($insert_id);
     }
 
     public function update($id, $data)
     {
-        $fields = [];
-        foreach ($data as $key => $value) {
-            $fields[] = "{$key} = '{$value}'";
-        }
-
-        $fields = implode(', ', $fields);
+        $fields = implode(', ', array_map(function ($key, $value) {
+            return "{$key} = '{$value}'";
+        }, array_keys($data), array_values($data)));
 
         $sql = "UPDATE {$this->table} SET {$fields} WHERE id = ?";
-        $values = array_values($data);
-        $values[] = $id;
+        $this->executeQuery($sql, [$id]);
 
-        $this->query($sql, $values);
-        return $this->findByPk($id);
+        return $this->findById($id);
     }
 
     public function delete($id)
     {
         $sql = "DELETE FROM {$this->table} WHERE id = ?";
-        $this->query($sql, [$id], 'i');
+        $this->executeQuery($sql, [$id], 'i');
         return true;
     }
 }
